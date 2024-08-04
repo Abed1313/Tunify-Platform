@@ -12,7 +12,7 @@ Tunify Platform includes the following features:
 - Playlists can have multiple songs.
 
 ## The Tunify ERD Diagram
-![Tunify ERD ](assets/ERDTunify.PNG)
+[Link](https://github.com/Abed1313/Tunify-Platform/blob/master/Tunify-Platform/assets/ERDTunify.PNG)
 
 ## Data Models and Relationships
 
