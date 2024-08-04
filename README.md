@@ -11,6 +11,9 @@ Tunify Platform includes the following features:
 - Artists can have multiple albums and songs.
 - Playlists can have multiple songs.
 
+## The Tunify ERD Diagram
+![Tunify ERD ](assets/ERDTunify.PNG)
+
 ## Data Models and Relationships
 
 The Tunify Platform consists of the following entities and their relationships:
