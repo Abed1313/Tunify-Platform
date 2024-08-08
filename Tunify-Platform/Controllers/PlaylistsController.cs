@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tunify_Platform.Models;
 using Tunify_Platform.data;
+using Tunify_Platform.Repositories.Interfaces;
 
 namespace Tunify_Platform.Controllers
 {
@@ -14,40 +15,26 @@ namespace Tunify_Platform.Controllers
     [ApiController]
     public class PlaylistsController : ControllerBase
     {
-        private readonly TunifyDbContext _context;
+        private readonly IPlaylist _playlist;
 
-        public PlaylistsController(TunifyDbContext context)
+        public PlaylistsController(IPlaylist context)
         {
-            _context = context;
+            _playlist = context;
         }
 
         // GET: api/Playlists
+        [Route("/Playlists/GetAllPlaylists")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Playlist>>> GetPlaylists()
         {
-          if (_context.Playlists == null)
-          {
-              return NotFound();
-          }
-            return await _context.Playlists.ToListAsync();
+          return await _playlist.GetAllPlaylist();
         }
 
         // GET: api/Playlists/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Playlist>> GetPlaylist(int id)
         {
-          if (_context.Playlists == null)
-          {
-              return NotFound();
-          }
-            var playlist = await _context.Playlists.FindAsync(id);
-
-            if (playlist == null)
-            {
-                return NotFound();
-            }
-
-            return playlist;
+          return await _playlist.GetPlaylistById(id);
         }
 
         // PUT: api/Playlists/5
@@ -55,30 +42,8 @@ namespace Tunify_Platform.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlaylist(int id, Playlist playlist)
         {
-            if (id != playlist.PlaylistID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(playlist).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlaylistExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var updatePlaylist = await _playlist.UpdatePlaylist(id,playlist);
+            return Ok(updatePlaylist);
         }
 
         // POST: api/Playlists
@@ -86,39 +51,16 @@ namespace Tunify_Platform.Controllers
         [HttpPost]
         public async Task<ActionResult<Playlist>> PostPlaylist(Playlist playlist)
         {
-          if (_context.Playlists == null)
-          {
-              return Problem("Entity set 'TunifyDbContext.Playlists'  is null.");
-          }
-            _context.Playlists.Add(playlist);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPlaylist", new { id = playlist.PlaylistID }, playlist);
+            var newPlaylist = await _playlist.CreatePlaylist(playlist);
+            return Ok(playlist);
         }
 
         // DELETE: api/Playlists/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlaylist(int id)
         {
-            if (_context.Playlists == null)
-            {
-                return NotFound();
-            }
-            var playlist = await _context.Playlists.FindAsync(id);
-            if (playlist == null)
-            {
-                return NotFound();
-            }
-
-            _context.Playlists.Remove(playlist);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PlaylistExists(int id)
-        {
-            return (_context.Playlists?.Any(e => e.PlaylistID == id)).GetValueOrDefault();
+            var deletePlaylist = _playlist.DeletePlaylist(id);
+            return Ok(deletePlaylist);
         }
     }
 }
