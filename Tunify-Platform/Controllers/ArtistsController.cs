@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tunify_Platform.Models;
 using Tunify_Platform.data;
+using Tunify_Platform.Repositories.Interfaces;
 
 namespace Tunify_Platform.Controllers
 {
@@ -14,40 +15,26 @@ namespace Tunify_Platform.Controllers
     [ApiController]
     public class ArtistsController : ControllerBase
     {
-        private readonly TunifyDbContext _context;
+        private readonly IArtists _artists;
 
-        public ArtistsController(TunifyDbContext context)
+        public ArtistsController(IArtists context)
         {
-            _context = context;
+            _artists = context;
         }
 
         // GET: api/Artists
+        [Route("/Artest/GetAllArtest")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Artists>>> GetArtists()
         {
-          if (_context.Artists == null)
-          {
-              return NotFound();
-          }
-            return await _context.Artists.ToListAsync();
+          return await _artists.GetAllArtists();
         }
 
         // GET: api/Artists/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Artists>> GetArtists(int id)
         {
-          if (_context.Artists == null)
-          {
-              return NotFound();
-          }
-            var artists = await _context.Artists.FindAsync(id);
-
-            if (artists == null)
-            {
-                return NotFound();
-            }
-
-            return artists;
+         return await _artists.GetArtistsById(id);
         }
 
         // PUT: api/Artists/5
@@ -55,30 +42,8 @@ namespace Tunify_Platform.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutArtists(int id, Artists artists)
         {
-            if (id != artists.ArtistsID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(artists).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ArtistsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var updateAretest = await _artists.UpdateArtists(id, artists);
+            return Ok(updateAretest);
         }
 
         // POST: api/Artists
@@ -86,39 +51,16 @@ namespace Tunify_Platform.Controllers
         [HttpPost]
         public async Task<ActionResult<Artists>> PostArtists(Artists artists)
         {
-          if (_context.Artists == null)
-          {
-              return Problem("Entity set 'TunifyDbContext.Artists'  is null.");
-          }
-            _context.Artists.Add(artists);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetArtists", new { id = artists.ArtistsID }, artists);
+          var newArtest = await _artists.CreateArtists(artists);
+            return Ok(newArtest);
         }
 
-        // DELETE: api/Artists/5
+        // DELETE: api/Artists/5n 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArtists(int id)
         {
-            if (_context.Artists == null)
-            {
-                return NotFound();
-            }
-            var artists = await _context.Artists.FindAsync(id);
-            if (artists == null)
-            {
-                return NotFound();
-            }
-
-            _context.Artists.Remove(artists);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ArtistsExists(int id)
-        {
-            return (_context.Artists?.Any(e => e.ArtistsID == id)).GetValueOrDefault();
+           var deleteArtest = _artists.DeleteArtists(id);
+            return Ok(deleteArtest);
         }
     }
 }

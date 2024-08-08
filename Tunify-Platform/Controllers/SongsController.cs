@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tunify_Platform.Models;
 using Tunify_Platform.data;
+using Tunify_Platform.Repositories.Interfaces;
 
 namespace Tunify_Platform.Controllers
 {
@@ -14,40 +15,26 @@ namespace Tunify_Platform.Controllers
     [ApiController]
     public class SongsController : ControllerBase
     {
-        private readonly TunifyDbContext _context;
+        private readonly ISongs _songs;
 
-        public SongsController(TunifyDbContext context)
+        public SongsController(ISongs context)
         {
-            _context = context;
+            _songs = context;
         }
 
         // GET: api/Songs
+        [Route("/Songs/GetAllSongs")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Songs>>> GetSongs()
         {
-          if (_context.Songs == null)
-          {
-              return NotFound();
-          }
-            return await _context.Songs.ToListAsync();
+          return await _songs.GetAllSongs();
         }
 
         // GET: api/Songs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Songs>> GetSongs(int id)
-        {
-          if (_context.Songs == null)
-          {
-              return NotFound();
-          }
-            var songs = await _context.Songs.FindAsync(id);
-
-            if (songs == null)
-            {
-                return NotFound();
-            }
-
-            return songs;
+        { 
+            return await _songs.GetSongsById(id);
         }
 
         // PUT: api/Songs/5
@@ -55,30 +42,8 @@ namespace Tunify_Platform.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSongs(int id, Songs songs)
         {
-            if (id != songs.SongsID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(songs).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SongsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var updateSongs = await _songs.UpdateSongs(id, songs);
+            return Ok(updateSongs);
         }
 
         // POST: api/Songs
@@ -86,39 +51,16 @@ namespace Tunify_Platform.Controllers
         [HttpPost]
         public async Task<ActionResult<Songs>> PostSongs(Songs songs)
         {
-          if (_context.Songs == null)
-          {
-              return Problem("Entity set 'TunifyDbContext.Songs'  is null.");
-          }
-            _context.Songs.Add(songs);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetSongs", new { id = songs.SongsID }, songs);
+         var newSongs = await _songs.CreateSongs(songs);
+            return Ok(newSongs);
         }
 
         // DELETE: api/Songs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSongs(int id)
         {
-            if (_context.Songs == null)
-            {
-                return NotFound();
-            }
-            var songs = await _context.Songs.FindAsync(id);
-            if (songs == null)
-            {
-                return NotFound();
-            }
-
-            _context.Songs.Remove(songs);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool SongsExists(int id)
-        {
-            return (_context.Songs?.Any(e => e.SongsID == id)).GetValueOrDefault();
+          var deleteSongs =  _songs.DeleteSongs(id);
+            return Ok(deleteSongs);
         }
     }
 }
