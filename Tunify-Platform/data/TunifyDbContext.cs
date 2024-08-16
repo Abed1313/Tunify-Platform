@@ -113,6 +113,16 @@ namespace Tunify_Platform.data
         new Songs { SongsID = 4, Title = "Song Four", ArtistID = 1, AlbumID = 1, Duration = new TimeSpan(0, 3, 22), Genre = "Pop" },
         new Songs { SongsID = 5, Title = "Song Five", ArtistID = 2, AlbumID = 2, Duration = new TimeSpan(0, 5, 30), Genre = "Rock" }
     );
+            modelBuilder.Entity<PlaylistSongs>().HasData(
+        new PlaylistSongs { PlaylistSongsID = 1, PlaylistID = 1, SongID = 1 },
+        new PlaylistSongs { PlaylistSongsID = 2, PlaylistID = 1, SongID = 2 },
+        new PlaylistSongs { PlaylistSongsID = 3, PlaylistID = 2, SongID = 3 },
+        new PlaylistSongs { PlaylistSongsID = 4, PlaylistID = 3, SongID = 4 },
+        new PlaylistSongs { PlaylistSongsID = 5, PlaylistID = 4, SongID = 5 },
+        new PlaylistSongs { PlaylistSongsID = 6, PlaylistID = 5, SongID = 1 },
+        new PlaylistSongs { PlaylistSongsID = 7, PlaylistID = 5, SongID = 3 }
+);
+
 
             base.OnModelCreating(modelBuilder);
         }
