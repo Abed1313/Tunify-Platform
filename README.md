@@ -12,7 +12,7 @@ Tunify Platform includes the following features:
 - Playlists can have multiple songs.
 
 ## The Tunify ERD Diagram
-![Tunify ERD ](assets/ERDTunify.PNG)
+[Link](https://github.com/Abed1313/Tunify-Platform/blob/master/Tunify-Platform/assets/ERDTunify.PNG)
 
 ## Data Models and Relationships
 
@@ -100,4 +100,8 @@ The Tunify Platform consists of the following entities and their relationships:
 ### Cleaner Code: By encapsulating data access code within repositories, the business logic remains clean and focused on what it is supposed to do, without being cluttered by data access concerns.
 
 ## Example in Tunify Platform
+
 ### In the Tunify Platform project, the Repository Pattern is used to abstract the data access logic for entities like Artists, Playlists, Songs, and Users. This ensures that the rest of the application remains agnostic to the specifics of how and where the data is stored, while also making it easier to extend or modify the data access layer in the future.
+
+### In the Tunify Platform project, the Repository Pattern is used to abstract the data access logic for entities like Artists, Playlists, Songs, and Users. This ensures that the rest of the application remains agnostic to the specifics of how and where the data is stored, while also making it easier to extend or modify the data access layer in the future.
+
