@@ -62,5 +62,13 @@ namespace Tunify_Platform.Controllers
           var deleteSongs =  _songs.DeleteSongs(id);
             return Ok(deleteSongs);
         }
+
+        [HttpPost]
+        [Route("playlists/{playlistId}/songs/{songId}")]
+        public async Task<ActionResult<Songs>> AddPlaylistToSongs(int songId, int playlistId)
+        {
+            var newSongs = await _songs.AddPlaylistToSongs( songId, playlistId);
+            return Ok(newSongs);
+        }
     }
 }
