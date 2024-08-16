@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tunify-Platform", "Tunify-Platform\Tunify-Platform.csproj", "{956E59CD-D6D3-45E3-A492-16AAD1BA6024}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tunify-Platform", "Tunify-Platform\Tunify-Platform.csproj", "{956E59CD-D6D3-45E3-A492-16AAD1BA6024}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TunifyPlatformTest", "TunifyPlatformTest\TunifyPlatformTest.csproj", "{4A396962-4BA0-497D-B095-B80BAE7C98B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{956E59CD-D6D3-45E3-A492-16AAD1BA6024}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{956E59CD-D6D3-45E3-A492-16AAD1BA6024}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{956E59CD-D6D3-45E3-A492-16AAD1BA6024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A396962-4BA0-497D-B095-B80BAE7C98B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A396962-4BA0-497D-B095-B80BAE7C98B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A396962-4BA0-497D-B095-B80BAE7C98B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A396962-4BA0-497D-B095-B80BAE7C98B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
