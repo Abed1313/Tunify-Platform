@@ -25,7 +25,46 @@ namespace Tunify_Platform
             builder.Services.AddScoped<ISongs, SongsServises>();
             builder.Services.AddScoped<IUsers, UsersServises>();
 
+
+            //swagger configuration
+            builder.Services.AddSwaggerGen
+                (
+
+                option =>
+                {
+                    option.SwaggerDoc("TunifyPlatformAPI", new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
+                        Title = "Tunify Platform Api Doc",
+                        Version = "v1",
+                        Description = "Api for managing all Tunify Platform"
+                    });
+                }
+                );
+
             var app = builder.Build();
+
+
+
+            // call swagger service
+            app.UseSwagger
+                (
+                options =>
+                {
+                    options.RouteTemplate = "api/{documentName}/swagger.json";
+                }
+                );
+
+            // call swagger UI
+            app.UseSwaggerUI
+                (
+                options =>
+                {
+                    options.SwaggerEndpoint("/api/TunifyPlatformAPI/swagger.json", "TP Api");
+                    options.RoutePrefix = "";
+                }
+                );
+
+            
             app.MapControllers();
 
             app.MapGet("/", () => "Hello World!");
