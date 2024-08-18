@@ -105,3 +105,19 @@ The Tunify Platform consists of the following entities and their relationships:
 
 ### In the Tunify Platform project, the Repository Pattern is used to abstract the data access logic for entities like Artists, Playlists, Songs, and Users. This ensures that the rest of the application remains agnostic to the specifics of how and where the data is stored, while also making it easier to extend or modify the data access layer in the future.
 
+# Swagger UI Integration
+## Overview
+### Swagger UI has been integrated into this project to provide an interactive interface for developers and testers to explore and interact with the Tunify Platform API. Swagger UI allows you to see the API documentation, understand the endpoints, and execute requests directly from the browser without the need for third-party tools.
+
+## Key Features of Swagger UI
+### -Interactive API Documentation: Easily browse and test all the API endpoints with detailed information about request parameters and responses.
+### -Live Request Testing: Make API requests directly from the browser and see live responses.
+### -Customizable: The Swagger UI can be customized to suit the needs of your project, including setting custom paths, titles, and descriptions.
+
+## How to Access and Use Swagger UI
+### Start the Application.
+### Open Swagger UI:
+###     -Open your web browser.
+
+### Explore the API:
+### View and test all available API endpoints directly from the Swagger UI.
