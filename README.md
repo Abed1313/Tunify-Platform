@@ -121,3 +121,71 @@ The Tunify Platform consists of the following entities and their relationships:
 
 ### Explore the API:
 ### View and test all available API endpoints directly from the Swagger UI.
+
+
+# Tunify Platform - User Authentication Service
+### This repository includes the implementation of a user authentication service for the Tunify Platform, utilizing ASP.NET Core Identity for user management. The service is designed to handle user registration, login, and logout functionalities.
+
+## Overview
+### The project is structured around the following components:
+## 1. IdentityUserService
+### Location: Repositories/Services/IdentityUserService.cs
+Purpose: This class implements the IUser interface to provide user management functionalities such as registration, login, and logout using ASP.NET Core Identity.
+Key Methods:
+Register: Registers a new user by creating an instance of ApplicationUser. Handles potential errors during registration and returns the newly created user's details.
+LoginUser: Authenticates a user by validating their credentials and returns the user's details if the credentials are correct.
+LogoutUser: Logs out the user by signing them out and returns their details.
+
+## 2. IUser Interface
+Location: Repositories/Interfaces/IUser.cs
+Purpose: This interface defines the contract for user management operations. It ensures that the IdentityUserService implements the required methods for registering, logging in, and logging out users.
+## 3. HomeController
+Location: Controllers/HomeController.cs
+Purpose: This API controller provides endpoints for user registration, login, and logout. It interacts with the IdentityUserService to perform these operations.
+API Endpoints:
+POST /api/home/register: Registers a new user.
+
+Request Body: RegisterUserDTO containing UserName, Email, and Password.
+Response: Returns the user details if successful, otherwise returns validation errors.
+POST /api/home/login: Logs in a user.
+
+Request Body: LoginDto containing Username and Password.
+Response: Returns the user details if successful, otherwise returns an Unauthorized status.
+POST /api/home/logout: Logs out a user.
+
+Request Body: A string representing the Username.
+Response: Returns the user details after successful logout.
+
+## DTOs (Data Transfer Objects)
+### RegisterUserDTO
+Represents the data required to register a new user.
+Fields:
+UserName
+Email
+Password
+### LoginDto
+Represents the data required to log in a user.
+Fields:
+Username
+Password
+### UserDto
+Represents the user details returned after registration, login, or logout.
+Fields:
+Id
+UserName
+## How to Use
+### Registration:
+Send a POST request to /api/home/register with the required user details.
+Login:
+Send a POST request to /api/home/login with the user's credentials.
+Logout:
+Send a POST request to /api/home/logout with the username to log out the user.
+## Prerequisites
+.NET 6.0 or higher
+ASP.NET Core Identity
+A configured database for Identity storage
+## Installation
+Clone the repository.
+Restore dependencies by running dotnet restore.
+Update your database connection string in the appsettings.json file.
+Run the application using dotnet run.

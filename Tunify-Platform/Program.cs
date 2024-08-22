@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tunify_Platform.data;
+using Tunify_Platform.Models;
 using Tunify_Platform.Repositories.Interfaces;
+using Tunify_Platform.Repositories.Services;
 using Tunify_Platform.Repositories.Servises;
 
 namespace Tunify_Platform
@@ -18,12 +21,17 @@ namespace Tunify_Platform
             string BuilderVar = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<TunifyDbContext>(optionX => optionX.UseSqlServer(BuilderVar));
 
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<TunifyDbContext>()
+                ;
+
 
             // Register repositories.    
             builder.Services.AddScoped<IArtists, ArtistsServises>();
             builder.Services.AddScoped<IPlaylist, PlaylistServises>();
             builder.Services.AddScoped<ISongs, SongsServises>();
             builder.Services.AddScoped<IUsers, UsersServises>();
+            builder.Services.AddScoped<IUser, IdentityUserService>();
 
 
             //swagger configuration
@@ -43,7 +51,7 @@ namespace Tunify_Platform
 
             var app = builder.Build();
 
-
+            app.UseAuthentication();
 
             // call swagger service
             app.UseSwagger
