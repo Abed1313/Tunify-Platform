@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Security.Claims;
 using Tunify_Platform.Models;
 using Tunify_Platform.Models.DTO;
 using Tunify_Platform.Repositories.Interfaces;
+using Tunify_Platform.Repositories.Servises;
 
 namespace Tunify_Platform.Repositories.Services
 {
@@ -11,12 +13,18 @@ namespace Tunify_Platform.Repositories.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public IdentityUserService(UserManager<ApplicationUser> userManager , SignInManager<ApplicationUser> signInManager)
+        //Inject JWT Serveses
+        private JwtTokenServeses JwtTokenServeses;
+        //constructor
+        public IdentityUserService(UserManager<ApplicationUser> userManager,
+                           SignInManager<ApplicationUser> signInManager,
+                           JwtTokenServeses jwtTokenServeses)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            JwtTokenServeses = jwtTokenServeses ?? throw new ArgumentNullException(nameof(jwtTokenServeses));
         }
-
+        // Register
         public async Task<UserDto> Register(RegisterUserDTO registerEmployeeDTO, ModelStateDictionary modelState)
         {
             var employee = new ApplicationUser
@@ -28,10 +36,13 @@ namespace Tunify_Platform.Repositories.Services
             var result = await _userManager.CreateAsync(employee, registerEmployeeDTO.Password);
             if (result.Succeeded)
             {
+                // add Roles to the new rigstred user
+                await _userManager.AddToRolesAsync(employee, registerEmployeeDTO.Roles);
                 return new UserDto
                 {
                     Id = employee.Id,
                     UserName = employee.UserName,
+                    Roles = await _userManager.GetRolesAsync(employee)
                 };
             }
 
@@ -45,24 +56,29 @@ namespace Tunify_Platform.Repositories.Services
             }
             return null;
         }
-
+        // Login
         public async Task<UserDto> LoginUser(string Username, string Password)
         {
             var user = await _userManager.FindByNameAsync(Username);
+            if (user == null)
+            {
+                return null; // or return a custom error indicating user not found
+            }
 
-            bool passValedation = await _userManager.CheckPasswordAsync(user, Password);
-
-            if (passValedation)
+            bool passValidation = await _userManager.CheckPasswordAsync(user, Password);
+            if (passValidation)
             {
                 return new UserDto()
                 {
                     Id = user.Id,
-                    UserName = user.Id,
+                    UserName = user.UserName,
+                    Token = await JwtTokenServeses.GenerateToken(user, TimeSpan.FromDays(14))
                 };
             }
             return null;
         }
 
+        // Logout
         public async Task<UserDto> LogoutUser(string Username)
         {
             var user = await _userManager.FindByNameAsync(Username);
@@ -80,5 +96,18 @@ namespace Tunify_Platform.Repositories.Services
             return result;
         }
 
+        public async Task<UserDto> userProfile(ClaimsPrincipal claimsPrincipal)
+        {
+           var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+            return new UserDto()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Token = await JwtTokenServeses.GenerateToken(user, System.TimeSpan.FromDays(14))
+            };
+
+
+        }
     }
 }

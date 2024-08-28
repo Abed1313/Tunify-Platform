@@ -55,7 +55,7 @@ namespace Tunify_Platform.data
                 .HasOne(s => s.Albums)
                 .WithMany(a => a.Songs)
                 .HasForeignKey(s => s.AlbumID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Subscriptions to Users (1:Many)
             modelBuilder.Entity<Users>()
@@ -124,10 +124,31 @@ namespace Tunify_Platform.data
         new PlaylistSongs { PlaylistSongsID = 6, PlaylistID = 5, SongID = 1 },
         new PlaylistSongs { PlaylistSongsID = 7, PlaylistID = 5, SongID = 3 }
 );
-
+            seedRole(modelBuilder, "Admin","Delete","Update");
+            seedRole(modelBuilder, "User");
 
             base.OnModelCreating(modelBuilder);
         }
 
+        private void seedRole(ModelBuilder modelBuilder, string roleName, params string[] claims)
+        {
+            var roleId = Guid.NewGuid().ToString();
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Id = roleId,
+                Name = roleName,
+                NormalizedName = roleName.ToUpper()
+            });
+
+            var roleClaims = claims.Select(claim => new IdentityRoleClaim<string>
+            {
+                Id = Guid.NewGuid().ToString().GetHashCode(), // generates a unique ID for each claim
+                RoleId = roleId,
+                ClaimType = "Permission", // or any custom claim type
+                ClaimValue = claim
+            }).ToArray();
+
+            modelBuilder.Entity<IdentityRoleClaim<string>>().HasData(roleClaims);
+        }
     }
 }

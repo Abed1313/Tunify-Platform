@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tunify_Platform.data;
 
@@ -11,9 +12,11 @@ using Tunify_Platform.data;
 namespace Tunify_Platform.Migrations
 {
     [DbContext(typeof(TunifyDbContext))]
-    partial class TunifyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827141634_seedRole")]
+    partial class seedRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,15 @@ namespace Tunify_Platform.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "424549c9-5213-464e-8597-fd62cd6892a3",
+                            Id = "admin",
+                            ConcurrencyStamp = "00000000-0000-0000-0000-000000000000",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "268913f4-3e4a-4982-b373-17b183e453fb",
+                            Id = "user",
+                            ConcurrencyStamp = "00000000-0000-0000-0000-000000000000",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -86,22 +91,6 @@ namespace Tunify_Platform.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -352306707,
-                            ClaimType = "Permission",
-                            ClaimValue = "Delete",
-                            RoleId = "424549c9-5213-464e-8597-fd62cd6892a3"
-                        },
-                        new
-                        {
-                            Id = -310928096,
-                            ClaimType = "Permission",
-                            ClaimValue = "Update",
-                            RoleId = "424549c9-5213-464e-8597-fd62cd6892a3"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -769,7 +758,7 @@ namespace Tunify_Platform.Migrations
                     b.HasOne("Tunify_Platform.Models.Albums", "Albums")
                         .WithMany("Songs")
                         .HasForeignKey("AlbumID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Tunify_Platform.Models.Artists", "Artists")

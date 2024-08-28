@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Tunify_Platform.Models;
 using Tunify_Platform.data;
 using Tunify_Platform.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Tunify_Platform.Controllers
 {
@@ -56,6 +58,7 @@ namespace Tunify_Platform.Controllers
         }
 
         // DELETE: api/Songs/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSongs(int id)
         {
