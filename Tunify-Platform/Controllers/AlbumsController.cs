@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tunify_Platform.Models;
 using Tunify_Platform.data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tunify_Platform.Controllers
 {
